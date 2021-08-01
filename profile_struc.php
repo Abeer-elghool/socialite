@@ -72,19 +72,19 @@
                         </div>
                         <div class="col-md-12">
                             <label for="inputEmail4" class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" id="inputEmail4">
+                            <input type="email" value="<?php echo $user_data['email']; ?>" name="email" class="form-control" id="inputEmail4">
                         </div>
                         <div class="col-6">
                             <label for="inputAddress" class="form-label">Address</label>
-                            <input type="text" name="address" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                            <input type="text" value="<?php echo $user_data['address']; ?>" name="address" class="form-control" id="inputAddress" placeholder="1234 Main St">
                         </div>
                         <div class="col-6">
                             <label for="inputCity" class="form-label">City</label>
-                            <input type="text" name="city" class="form-control" id="inputCity">
+                            <input type="text" value="<?php echo $user_data['city']; ?>" name="city" class="form-control" id="inputCity">
                         </div>
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Upload Image</label>
-                            <input class="form-control" type="file" id="formFile" name="postImage">
+                            <input class="form-control" type="file" id="formFile" name="personalImage">
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm">save</button>
                     </form>

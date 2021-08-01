@@ -1,0 +1,198 @@
+<?php 
+    
+   include '../helpers/functions.php';
+   include '../helpers/db.php';
+
+
+  $sql = "select * from users";
+  $op  = mysqli_query($con,$sql);
+
+
+
+   if($_SERVER['REQUEST_METHOD'] == "POST"){
+       
+    // LOGIC ... 
+
+      $name  = CleanInputs(Sanitize($_POST['name'],2));
+      $email = CleanInputs($_POST['email']);
+      $phone = $_POST['phone'];
+      $password = $_POST['password'];
+
+
+
+
+      $Message = [];
+      # Check Validation ... 
+      if(!Validator($name,1)){
+      
+        $Message['name'] = "Name Field Required";
+
+      }
+      
+      if(!Validator($name,2)){
+      
+        $Message['NameLength'] = "Title length must be > 3";
+
+      }
+
+
+    
+     if(!Validator($password,2,6)){
+      
+        $Message['password'] = "Password length must be >= 6";
+
+      }
+
+
+
+     if(!Validator($email,1)){
+      
+      $Message['emailRequird'] = "Email Field Required";
+
+    }
+
+    if(!Validator($email,4)){
+      
+      $Message['email'] = "Invalid Email";
+
+    }
+
+
+
+     if(count($Message) > 0){
+       $_SESSION['messages'] = $Message;
+             
+    }else{
+
+    # DB OPERATION .... 
+
+    $password = sha1($password);
+
+     $insertSql = "INSERT INTO users (name, email, phone, password, user_type) values ('$name','$email', '$phone', '$password','user')";
+
+     $InsertOp  = mysqli_query($con,$insertSql);
+
+     if($InsertOp){
+
+          $Message['Result'] = "Data inserted.";
+        
+     }else{
+         $Message['Result']  = "Error Try Again.";
+     
+
+
+      }
+      $_SESSION['messages'] = $Message;
+
+      header('Location: index.php');
+
+     }
+
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    include '../header.php';
+?>
+  
+  <body class="sb-nav-fixed">
+        
+    
+<?php 
+    include '../nav.php';
+?>  
+
+
+        <div id="layoutSidenav">
+                  
+         
+<?php 
+    include '../sidNav.php';
+?>  
+
+
+
+
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Dashboard</h1>
+                        <ol class="breadcrumb mb-4">
+
+                        <?php 
+                        
+                            if(isset($_SESSION['messages'])){
+
+                               foreach($_SESSION['messages'] as $key =>  $data){
+
+                                echo '* '.$key.' : '.$data.'<br>';
+                               }
+
+                                 unset($_SESSION['messages']);
+                             }else{
+                        ?>
+                        
+                        <li class="breadcrumb-item active">Add Admin</li>
+                        <?php } ?>
+                        
+                        
+                        
+                        </ol>
+
+                      
+
+ <div class="container">
+
+ <form  method="post"  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>"  enctype ="multipart/form-data">
+ 
+ <div class="form-group">
+    <label for="exampleInputEmail1">Name</label>
+    <input type="text"  name="name" class="form-control" id="exampleInputName" aria-describedby="" placeholder="Enter Name">
+  </div>
+
+
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+  </div>
+
+ <div class="form-group">
+     <label for="inputPhone" class="form-label">Phone</label>
+     <input type="tel" name="phone" class="form-control" id="inputPhone">
+ </div>
+
+  <div class="form-group">
+    <label for="exampleInputPassword1"> Password</label>
+    <input type="password"  name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+
+ 
+
+
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+
+
+                       
+                </div>
+                </main>
+               
+    
+                
+<?php 
+    include '../footer.php';
+?>  
+

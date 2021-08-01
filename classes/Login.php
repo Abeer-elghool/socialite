@@ -1,5 +1,5 @@
 <?php
-include('DbConnect.php');
+include_once('DbConnect.php');
 
 class Login
 {

@@ -1,5 +1,5 @@
 <?php
-include('DbConnect.php');
+include_once('DbConnect.php');
 
 class Post
 {
@@ -32,7 +32,7 @@ class Post
         $data = [];
         $db_conn = DbConnect::getInstance();
         $user_id = $_SESSION['user']['id'];
-        $sql = "SELECT * FROM posts ORDER BY created_at desc";
+        $sql = "SELECT * FROM posts WHERE  admin_accept = 1 ORDER BY created_at desc";
         $result = mysqli_query($db_conn->getConnection(), $sql);
         if(mysqli_num_rows($result) != 0){
             $data = mysqli_fetch_all($result);
