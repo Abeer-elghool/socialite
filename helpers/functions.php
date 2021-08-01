@@ -78,19 +78,46 @@ function Sanitize($input,$flag){
 }
 
 
+/**
+ * @param $dis
+ * @return string
+ */
+function dashboardUrl($dis){
+    return "http://".$_SERVER['HTTP_HOST']."/group4/Blog/Admin/".$dis;
+}
 
+/**
+ * @param $dis
+ * @return string
+ */
+function webUrl($dis){
+    return "http://".$_SERVER['HTTP_HOST']."/socialite/".$dis;
+}
 
-
-
-function url($dis){
-
-    return   $txt = "http://".$_SERVER['HTTP_HOST']."/group4/Blog/Admin/".$dis;
-
-
+function imagePath($image){
+    return "http://".$_SERVER['HTTP_HOST']."/socialite/layouts/imgs/".$image;
 }
 
 
+function uploadImage($image){
+    if(!empty($image)){
+        $tmp_path = $image['tmp_name'];
+        $name     = $image['name'];
 
+        $nameArray = explode('.',$name);
+        $FileExtension = strtolower($nameArray[1]);
 
+        $FinalName = rand().time().'.'.$FileExtension;
+
+        $allowedExtension = ['png','jpg','pdf','mp4'];
+
+        if(in_array($FileExtension,$allowedExtension)){
+            $disFolder = './layouts/imgs/';
+            $disPath  = $disFolder.$FinalName;
+            move_uploaded_file($tmp_path,$disPath);
+        }
+        return $FinalName;
+    }
+}
 
 ?>

@@ -9,6 +9,7 @@ class Register
     private $phone;
     private $city;
     private $address;
+    private $file_name;
 
     /**
      * Register constructor.
@@ -18,8 +19,9 @@ class Register
      * @param $phone
      * @param $city
      * @param $address
+     * @param $file_name;
      */
-    public function __construct($name, $email, $password, $phone, $city, $address)
+    public function __construct($name, $email, $password, $phone, $city, $address, $file_name)
     {
         $this->name = $name;
         $this->email = $email;
@@ -27,16 +29,22 @@ class Register
         $this->phone = $phone;
         $this->city = $city;
         $this->address = $address;
+        $this->file_name = $file_name;
         $this->register();
     }
 
     public function register(){
-        $password = sha1($this->password);
-        $sql = "INSERT INTO users (name, email, phone, address, city, password, user_type) 
-                VALUES ('$this->name', '$this->email', '$this->phone', '$this->address', '$this->city', '$password', 'user')";
         $db_conn = DbConnect::getInstance();
+        $password = sha1($this->password);
+        $sql = "SELECT * FROM users WHERE email = '$this->email' or phone = '$this->phone'";
         $result = mysqli_query($db_conn->getConnection(), $sql);
-        //return mysqli_num_rows($result) == 1;
+        if(mysqli_num_rows($result) != 0){
+            return false;
+        }
+        $sql = "INSERT INTO users (name, email, phone, address, city, password, user_type, image) 
+                VALUES ('$this->name', '$this->email', '$this->phone', '$this->address', '$this->city', '$password', 'user', '$this->file_name')";
+        $result = mysqli_query($db_conn->getConnection(), $sql);
+        return true;
     }
 
 }

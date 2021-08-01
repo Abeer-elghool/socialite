@@ -1,12 +1,12 @@
 <?php
 
-include('helpers/functions.php');
+include_once('helpers/functions.php');
 
 class Validator
 {
     private $name;
-    private $email;
-    private $password;
+    public static $email;
+    public static $password;
     private $phone;
     private $city;
     private $address;
@@ -23,12 +23,18 @@ class Validator
     public function __construct($name, $email, $password, $phone, $city, $address)
     {
         $this->name = CleanInputs($name) ? $name : ['success' => false, 'msg' => 'Invalid Name'];
-        $this->email = Validator($email,4) ? $email : ['success' => false, 'msg' => 'Invalid Email'];
-        $this->password = Validator($password,2) ? $password : ['success' => false, 'msg' => 'Invalid Password'];
+        self::$email = Validator($email,4) ? $email : ['success' => false, 'msg' => 'Invalid Email'];
+        self::$password = !empty($password) && Validator($password,2) ? $password : ['success' => false, 'msg' => 'Invalid Password'];
         //$this->phone = strlen($phone) > 11 && is_numeric($phone) ? $phone : ['success' => false, 'msg' => 'Invalid Phone Number'];
         $this->phone = $phone;
         $this->city = CleanInputs($city) ? $city : ['success' => false, 'msg' => 'Invalid City'];
         $this->address = CleanInputs($address) ? $address : ['success' => false, 'msg' => 'Invalid Address'];
+    }
+
+    public static function valid($email, $password)
+    {
+        self::$email = Validator($email,4) ? $email : ['success' => false, 'msg' => 'Invalid Email'];
+        self::$password = !empty($password) && Validator($password,2) ? $password : ['success' => false, 'msg' => 'Invalid Password'];
     }
 
     /**
@@ -44,7 +50,7 @@ class Validator
      */
     public function getEmail()
     {
-        return $this->email;
+        return self::$email;
     }
 
     /**
@@ -52,7 +58,7 @@ class Validator
      */
     public function getPassword()
     {
-        return $this->password;
+        return self::$password;
     }
 
     /**
